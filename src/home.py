@@ -1,9 +1,11 @@
 import sys
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, 
-                             QHBoxLayout, QFrame, QStackedWidget, QSlider)
+                             QHBoxLayout, QFrame, QStackedWidget)
 from PyQt6.QtCore import Qt, QPropertyAnimation, QRect
 from PyQt6.QtGui import QPixmap
-from MQTTControlScreen import MQTTControlScreen
+from HTTPServerScreen import HTTPServerScreen
+from LiveViewScreen import LiveViewScreen
+from ImportDataScreen import ImportDataScreen
 
 class HomeScreen(QWidget):
     def __init__(self):
@@ -17,7 +19,6 @@ class HomeScreen(QWidget):
         main_layout = QHBoxLayout()
         main_layout.setContentsMargins(0, 0, 0, 0)
         
-        # Barra lateral
         self.sidebar_frame = QFrame()
         self.sidebar_frame.setStyleSheet("background-color: #a16ef5;")
         self.sidebar_frame.setFixedWidth(200)
@@ -38,21 +39,21 @@ class HomeScreen(QWidget):
         sidebar_layout.addWidget(logo_label)
         
         # Botões do menu lateral
-        self.btn_mqtt = QPushButton("🔌 Ligar MQTT")
+        self.btn_server = QPushButton("🔌 Ligar Server")
         self.btn_import = QPushButton("📥 Importar Dados")
         self.btn_live = QPushButton("📡 Live View")
         
-        for btn in [self.btn_mqtt, self.btn_import, self.btn_live]:
+        for btn in [self.btn_server, self.btn_import, self.btn_live]:
             btn.setFixedHeight(40)
             btn.setStyleSheet("border: none; background-color: #fff; padding: 10px; border-radius: 10px; font-weight: bold;")
             btn.clicked.connect(self.animate_button)
         
-        sidebar_layout.addWidget(self.btn_mqtt)
+        sidebar_layout.addWidget(self.btn_server)
         sidebar_layout.addWidget(self.btn_import)
         sidebar_layout.addWidget(self.btn_live)
         self.sidebar_frame.setLayout(sidebar_layout)
         
-        # Área de conteúdo com QStackedWidget
+        # Área de conteúdo usando QStackedWidget
         self.stack = QStackedWidget()
         
         # Página inicial ("Bem-vindo")
@@ -66,14 +67,21 @@ class HomeScreen(QWidget):
         self.home_content.setLayout(home_layout)
         self.stack.addWidget(self.home_content)
         
-        # Tela de Controle MQTT
-        self.mqtt_control = MQTTControlScreen()
-        self.stack.addWidget(self.mqtt_control)
+        # Tela de Controle do Server
+        self.server_control = HTTPServerScreen()
+        self.stack.addWidget(self.server_control)
+        
+        # Nova Tela de Live View
+        self.live_view_screen = LiveViewScreen()
+        self.stack.addWidget(self.live_view_screen)
+
+        self.import_screen = ImportDataScreen()
+        self.stack.addWidget(self.import_screen)
         
         # Conecta os botões para trocar a página da área de conteúdo
-        self.btn_mqtt.clicked.connect(lambda: self.stack.setCurrentWidget(self.mqtt_control))
-        self.btn_import.clicked.connect(lambda: self.stack.setCurrentWidget(self.home_content))
-        self.btn_live.clicked.connect(lambda: self.stack.setCurrentWidget(self.home_content))
+        self.btn_server.clicked.connect(lambda: self.stack.setCurrentWidget(self.server_control))
+        self.btn_import.clicked.connect(lambda: self.stack.setCurrentWidget(self.import_screen))
+        self.btn_live.clicked.connect(lambda: self.stack.setCurrentWidget(self.live_view_screen))
         
         main_layout.addWidget(self.sidebar_frame)
         main_layout.addWidget(self.stack)
