@@ -1,0 +1,16 @@
+Nome da Gaiola: AAB
+Diâmetro da Gaiola: 20.00 cm
+
+Início: 21/04/2025 11:15:16 | Voltas: 22 | Duração(s): 4 | Distância(m): 13.82 | Vel.Média(m/s): 3.46
+Início: 21/04/2025 11:15:33 | Voltas: 14 | Duração(s): 3 | Distância(m): 8.80 | Vel.Média(m/s): 2.93
+Início: 21/04/2025 11:35:36 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 21/04/2025 11:46:38 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 21/04/2025 11:54:27 | Voltas: 43 | Duração(s): 4 | Distância(m): 27.02 | Vel.Média(m/s): 6.75
+Início: 21/04/2025 11:57:58 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 21/04/2025 11:58:24 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 21/04/2025 11:58:49 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 21/04/2025 12:03:28 | Voltas: 16 | Duração(s): 5 | Distância(m): 10.05 | Vel.Média(m/s): 2.01
+Início: 22/04/2025 21:13:33 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 22/04/2025 21:13:42 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 22/04/2025 21:13:47 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
+Início: 22/04/2025 21:20:29 | Voltas: 28 | Duração(s): 16 | Distância(m): 17.59 | Vel.Média(m/s): 1.10
