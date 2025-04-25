@@ -4,12 +4,21 @@ from PyQt6.QtGui import QIcon
 from welcome import WelcomeScreen
 
 def resource_path(relative_path):
-    """Obtém o caminho absoluto para o recurso, funcionando tanto em desenvolvimento quanto em executável empacotado."""
-    if hasattr(sys, '_MEIPASS'):
+    """Retorna o caminho absoluto correto, considerando que tudo está em src/"""
+    try:
+        # Modo PyInstaller (executável empacotado)
         base_path = sys._MEIPASS
-    else:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+    except AttributeError:
+        # Modo desenvolvimento (python main.py)
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    full_path = os.path.join(base_path, relative_path)
+    
+    # Debug: Verifique se o arquivo existe
+    if not os.path.exists(full_path):
+        print(f"AVISO: Arquivo não encontrado em {full_path}")
+    
+    return full_path
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -23,7 +32,7 @@ if __name__ == '__main__':
         print("Erro ao carregar style.qss:", e)
 
     # Configura o ícone da janela
-    icon_path = resource_path("../AppCage.png")
+    icon_path = resource_path("AppCage.png")
     app.setWindowIcon(QIcon(icon_path))
 
     window = WelcomeScreen()

@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, 
                              QHBoxLayout, QFrame, QStackedWidget)
 from PyQt6.QtCore import Qt, QPropertyAnimation, QRect
@@ -8,6 +8,22 @@ from LiveViewScreen import LiveViewScreen
 from ImportDataScreen import ImportDataScreen
 from BaseWindow import BaseWindow
 
+def resource_path(relative_path):
+    """Retorna o caminho absoluto correto, considerando que tudo está em src/"""
+    try:
+        # Modo PyInstaller (executável empacotado)
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Modo desenvolvimento (python main.py)
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    full_path = os.path.join(base_path, relative_path)
+    
+    # Debug: Verifique se o arquivo existe
+    if not os.path.exists(full_path):
+        print(f"AVISO: Arquivo não encontrado em {full_path}")
+    
+    return full_path
 
 class HomeScreen(BaseWindow):
     def __init__(self):
@@ -31,8 +47,9 @@ class HomeScreen(BaseWindow):
         sidebar_layout.setSpacing(20)
 
         logo_label = QLabel()
+        icon_path = resource_path("AppCage.png")
         try:
-            pixmap = QPixmap("../AppCage.png")
+            pixmap = QPixmap(icon_path)
             pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio)
             logo_label.setPixmap(pixmap)
         except Exception:
@@ -40,7 +57,7 @@ class HomeScreen(BaseWindow):
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         sidebar_layout.addWidget(logo_label)
 
-        self.btn_server = QPushButton("🔌 Ligar Server")
+        self.btn_server = QPushButton("🔌 Ligar Servidor")
         self.btn_import = QPushButton("📥 Importar Dados")
         self.btn_live = QPushButton("📡 Live View")
 
