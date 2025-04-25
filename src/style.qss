@@ -4,11 +4,6 @@ QWidget {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Estilo específico para a tela de boas-vindas */
-QWidget#welcomeScreen {
-    background-color: #a16ef5;
-}
-
 /* Estilo para o Label da tela de boas-vindas */
 QLabel#welcomeLabel {
     font-size: 32px;

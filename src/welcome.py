@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt, QPropertyAnimation, QRect, QSequentialAnimationGroup
 from login import LoginScreen
+from BaseWindow import BaseWindow
 
-class WelcomeScreen(QWidget):
+class WelcomeScreen(BaseWindow):
     def __init__(self):
         super().__init__()
         self.setObjectName("welcomeScreen")  # Para aplicar estilos específicos definidos no style.qss
@@ -61,6 +62,15 @@ class WelcomeScreen(QWidget):
         anim_group.start()
 
     def goToLogin(self):
+        geometry = self.geometry()
+        is_maximized = self.isMaximized()
+
         self.login_screen = LoginScreen()
-        self.login_screen.show()
+        self.login_screen.setGeometry(geometry)
+        if is_maximized:
+            self.login_screen.showMaximized()
+        else:
+            self.login_screen.show()
+
         self.close()
+

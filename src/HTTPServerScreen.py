@@ -88,9 +88,20 @@ class HTTPServerScreen(QWidget):
             _uploaded       = False
             return jsonify({"reset": True})
 
-        @self.app.route("/status", methods=["GET"])
-        def status():
+        @self.app.route("/dados", methods=["GET"])
+        def receber_dados():
             return dados_esp
+        
+        @self.app.route("/dados", methods=["POST"])
+        def enviar_dados():
+            global dados_esp
+            dados = request.get_json()
+            if dados:
+                for chave in ["NumeroVoltas", "NomeGaiola", "TempoAtividade", "DiametroGaiola"]:
+                    if chave in dados:
+                        dados_esp[chave] = dados[chave]
+            print("📦 Dados recebidos do ESP:", dados_esp)
+            return {"status": "ok"}
 
         @self.app.route("/download", methods=["GET"])
         def download_converted():
@@ -199,7 +210,7 @@ class HTTPServerScreen(QWidget):
 
         ip = get_local_ip()
         port = 5000
-        self.status_label.setText(f"Ligado em http://{ip}:{port}")
+        self.status_label.setText(f"Ligado em {ip}:{port}")
 
     def stop_server(self):
         if self.server_thread:

@@ -1,8 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt, QPropertyAnimation, QRect, QSequentialAnimationGroup
 from home import HomeScreen
+from BaseWindow import BaseWindow
 
-class LoginScreen(QWidget):
+
+class LoginScreen(BaseWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Login")
@@ -96,9 +98,18 @@ class LoginScreen(QWidget):
 
     def on_success(self):
         print("Login bem-sucedido!")
-        self.hide()
+        geometry = self.geometry()
+        is_maximized = self.isMaximized()
+
         self.home_screen = HomeScreen()
-        self.home_screen.show()
+        self.home_screen.setGeometry(geometry)
+        if is_maximized:
+            self.home_screen.showMaximized()
+        else:
+            self.home_screen.show()
+
+        self.close()
+
 
     def animateFailure(self):
         original_geometry = self.login_button.geometry()

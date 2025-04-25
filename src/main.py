@@ -1,5 +1,4 @@
-import sys
-import os
+import sys, os
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QIcon
 from welcome import WelcomeScreen
@@ -24,7 +23,7 @@ if __name__ == '__main__':
         print("Erro ao carregar style.qss:", e)
 
     # Configura o ícone da janela
-    icon_path = resource_path("../AppCage.ico")
+    icon_path = resource_path("../AppCage.png")
     app.setWindowIcon(QIcon(icon_path))
 
     window = WelcomeScreen()

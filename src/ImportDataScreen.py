@@ -118,7 +118,7 @@ class ImportDataScreen(QWidget):
             resp.raise_for_status()
             self.status_label.setText("Solicitação enviada. Aguardando ESP...")
             self.btn_request.setEnabled(False)
-            self.timer.start(1000)
+            self.timer.start(10000)
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Falha ao solicitar histórico:\n{e}")
 

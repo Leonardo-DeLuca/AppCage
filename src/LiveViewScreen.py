@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 from PyQt6.QtCore import QTimer, Qt
 import requests
 import math
@@ -18,33 +18,72 @@ class LiveViewScreen(QWidget):
         self.label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.label_title)
         
-        # Label para exibir os dados recebidos
-        self.label_dados = QLabel("Aguardando dados...")
-        self.label_dados.setStyleSheet("font-size: 18px; color: #333;")
-        self.label_dados.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.label_dados)
+        layout.addStretch()
+        # Layout para as labels e informações
+        info_layout = QVBoxLayout()
         
-        # Label para velocidade média e distância
-        self.label_velocidade = QLabel("Velocidade Média: 0 m/s")
-        self.label_velocidade.setStyleSheet("font-size: 18px; color: #333;")
-        self.label_velocidade.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.label_velocidade)
+        # Nome da Gaiola
+        self.label_nome_gaiola = QLabel("Nome da Gaiola:")
+        self.value_nome_gaiola = QLabel("Aguardando...")
+        self.label_nome_gaiola.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_nome_gaiola.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_nome_gaiola, self.value_nome_gaiola))
+        
+        # Número de Voltas
+        self.label_numero_voltas = QLabel("Número de Voltas:")
+        self.value_numero_voltas = QLabel("0")
+        self.label_numero_voltas.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_numero_voltas.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_numero_voltas, self.value_numero_voltas))
+        
+        # Tempo de Atividade
+        self.label_tempo_atividade = QLabel("Tempo de Atividade:")
+        self.value_tempo_atividade = QLabel("0 s")
+        self.label_tempo_atividade.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_tempo_atividade.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_tempo_atividade, self.value_tempo_atividade))
+        
+        # Diâmetro da Gaiola
+        self.label_diametro_gaiola = QLabel("Diâmetro da Gaiola:")
+        self.value_diametro_gaiola = QLabel("0 m")
+        self.label_diametro_gaiola.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_diametro_gaiola.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_diametro_gaiola, self.value_diametro_gaiola))
+        
+        
 
-        self.label_distancia = QLabel("Distância: 0 m")
-        self.label_distancia.setStyleSheet("font-size: 18px; color: #333;")
-        self.label_distancia.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.label_distancia)
+        # Distância e Velocidade Média
+        self.label_distancia = QLabel("Distância:")
+        self.value_distancia = QLabel("0 m")
+        self.label_distancia.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_distancia.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_distancia, self.value_distancia))
+
+        self.label_velocidade = QLabel("Velocidade Média:")
+        self.value_velocidade = QLabel("0 m/s")
+        self.label_velocidade.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
+        self.value_velocidade.setStyleSheet("font-size: 18px; color: #333;")
+        info_layout.addLayout(self.create_info_row(self.label_velocidade, self.value_velocidade))
         
+        layout.addLayout(info_layout)
+
+        layout.addStretch()
         self.setLayout(layout)
         
-        # Timer para atualizar os dados a cada 1 segundo
         self.timer = QTimer()
         self.timer.timeout.connect(self.fetch_status)
-        self.timer.start(1000)
+        self.timer.start(10000)
+
+    def create_info_row(self, label, value_label):
+        row_layout = QHBoxLayout()
+        row_layout.addWidget(label)
+        row_layout.addWidget(value_label)
+        row_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        return row_layout
 
     def fetch_status(self):
         try:
-            response = requests.get("http://localhost:5000/status", timeout=0.5)
+            response = requests.get("http://localhost:5000/dados", timeout=0.5)
             if response.status_code == 200:
                 data = response.json()
                 numero_voltas = data.get("NumeroVoltas", 0)
@@ -52,8 +91,6 @@ class LiveViewScreen(QWidget):
                 tempo_atividade = data.get("TempoAtividade", 0)
                 diametro_gaiola = data.get("DiametroGaiola", 0.0)
 
-                
-                
                 # Converte para metros
                 diametro_gaiola_cm = data.get("DiametroGaiola", 0.0)
                 diametro_gaiola = diametro_gaiola_cm / 100.0  # cm → m
@@ -64,16 +101,14 @@ class LiveViewScreen(QWidget):
                 # Velocidade média = Distância / Tempo (se tempo > 0)
                 velocidade_media = distancia / tempo_atividade if tempo_atividade > 0 else 0
 
-                texto = (
-                    f"Nome da Gaiola: {nome_gaiola}\n"
-                    f"Número de Voltas: {numero_voltas}\n"
-                    f"Tempo de Atividade: {tempo_atividade} s\n"
-                    f"Diâmetro da Gaiola: {diametro_gaiola} m"
-                )
-                self.label_dados.setText(texto)
+                # Atualizando os valores nos labels
+                self.value_nome_gaiola.setText(nome_gaiola)
+                self.value_numero_voltas.setText(str(numero_voltas))
+                self.value_tempo_atividade.setText(f"{tempo_atividade} s")
+                self.value_diametro_gaiola.setText(f"{diametro_gaiola:.2f} m")
                 
-                self.label_distancia.setText(f"Distância: {distancia:.2f} m")
-                self.label_velocidade.setText(f"Velocidade Média: {velocidade_media:.2f} m/s")
+                self.value_distancia.setText(f"{distancia:.2f} m")
+                self.value_velocidade.setText(f"{velocidade_media:.2f} m/s")
         except Exception as e:
             # Se não conseguir obter os dados, não atualiza
             pass
