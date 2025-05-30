@@ -11,10 +11,8 @@ from BaseWindow import BaseWindow
 def resource_path(relative_path):
     """Retorna o caminho absoluto correto, considerando que tudo está em src/"""
     try:
-        # Modo PyInstaller (executável empacotado)
         base_path = sys._MEIPASS
     except AttributeError:
-        # Modo desenvolvimento (python main.py)
         base_path = os.path.dirname(os.path.abspath(__file__))
     
     full_path = os.path.join(base_path, relative_path)

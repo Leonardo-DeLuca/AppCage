@@ -1,16 +1,11 @@
-Nome da Gaiola: AAB
-Diâmetro da Gaiola: 20.00 cm
+Nome da Gaiola: Gaiola 8
+Diâmetro da Gaiola: 10.00 cm
 
-Início: 21/04/2025 11:15:16 | Voltas: 22 | Duração(s): 4 | Distância(m): 13.82 | Vel.Média(m/s): 3.46
-Início: 21/04/2025 11:15:33 | Voltas: 14 | Duração(s): 3 | Distância(m): 8.80 | Vel.Média(m/s): 2.93
-Início: 21/04/2025 11:35:36 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 21/04/2025 11:46:38 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 21/04/2025 11:54:27 | Voltas: 43 | Duração(s): 4 | Distância(m): 27.02 | Vel.Média(m/s): 6.75
-Início: 21/04/2025 11:57:58 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 21/04/2025 11:58:24 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 21/04/2025 11:58:49 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 21/04/2025 12:03:28 | Voltas: 16 | Duração(s): 5 | Distância(m): 10.05 | Vel.Média(m/s): 2.01
-Início: 22/04/2025 21:13:33 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 22/04/2025 21:13:42 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 22/04/2025 21:13:47 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.63 | Vel.Média(m/s): 0.00
-Início: 22/04/2025 21:20:29 | Voltas: 28 | Duração(s): 16 | Distância(m): 17.59 | Vel.Média(m/s): 1.10
+Início: 26/05/2025 18:23:04 | Voltas: 21 | Duração(s): 12 | Distância(m): 6.60 | Vel.Média(m/s): 0.55
+Início: 26/05/2025 18:23:46 | Voltas: 27 | Duração(s): 19 | Distância(m): 8.48 | Vel.Média(m/s): 0.45
+Início: 26/05/2025 18:24:18 | Voltas: 46 | Duração(s): 18 | Distância(m): 14.45 | Vel.Média(m/s): 0.80
+Início: 26/05/2025 18:24:50 | Voltas: 13 | Duração(s): 13 | Distância(m): 4.08 | Vel.Média(m/s): 0.31
+Início: 26/05/2025 18:25:57 | Voltas: 1 | Duração(s): 0 | Distância(m): 0.31 | Vel.Média(m/s): 0.00
+Início: 26/05/2025 18:32:57 | Voltas: 32 | Duração(s): 40 | Distância(m): 10.05 | Vel.Média(m/s): 0.25
+Início: 26/05/2025 18:48:58 | Voltas: 6 | Duração(s): 3 | Distância(m): 1.88 | Vel.Média(m/s): 0.63
+Início: 26/05/2025 18:49:11 | Voltas: 2 | Duração(s): 1 | Distância(m): 0.63 | Vel.Média(m/s): 0.63

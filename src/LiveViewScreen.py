@@ -19,40 +19,32 @@ class LiveViewScreen(QWidget):
         layout.addWidget(self.label_title)
         
         layout.addStretch()
-        # Layout para as labels e informações
         info_layout = QVBoxLayout()
         
-        # Nome da Gaiola
         self.label_nome_gaiola = QLabel("Nome da Gaiola:")
         self.value_nome_gaiola = QLabel("Aguardando...")
         self.label_nome_gaiola.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
         self.value_nome_gaiola.setStyleSheet("font-size: 18px; color: #333;")
         info_layout.addLayout(self.create_info_row(self.label_nome_gaiola, self.value_nome_gaiola))
         
-        # Número de Voltas
         self.label_numero_voltas = QLabel("Número de Voltas:")
         self.value_numero_voltas = QLabel("0")
         self.label_numero_voltas.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
         self.value_numero_voltas.setStyleSheet("font-size: 18px; color: #333;")
         info_layout.addLayout(self.create_info_row(self.label_numero_voltas, self.value_numero_voltas))
         
-        # Tempo de Atividade
         self.label_tempo_atividade = QLabel("Tempo de Atividade:")
         self.value_tempo_atividade = QLabel("0 s")
         self.label_tempo_atividade.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
         self.value_tempo_atividade.setStyleSheet("font-size: 18px; color: #333;")
         info_layout.addLayout(self.create_info_row(self.label_tempo_atividade, self.value_tempo_atividade))
         
-        # Diâmetro da Gaiola
         self.label_diametro_gaiola = QLabel("Diâmetro da Gaiola:")
         self.value_diametro_gaiola = QLabel("0 m")
         self.label_diametro_gaiola.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
         self.value_diametro_gaiola.setStyleSheet("font-size: 18px; color: #333;")
         info_layout.addLayout(self.create_info_row(self.label_diametro_gaiola, self.value_diametro_gaiola))
         
-        
-
-        # Distância e Velocidade Média
         self.label_distancia = QLabel("Distância:")
         self.value_distancia = QLabel("0 m")
         self.label_distancia.setStyleSheet("font-weight: bold; font-size: 18px; color: #333;")
@@ -91,17 +83,13 @@ class LiveViewScreen(QWidget):
                 tempo_atividade = data.get("TempoAtividade", 0)
                 diametro_gaiola = data.get("DiametroGaiola", 0.0)
 
-                # Converte para metros
                 diametro_gaiola_cm = data.get("DiametroGaiola", 0.0)
                 diametro_gaiola = diametro_gaiola_cm / 100.0  # cm → m
 
-                # Distância = NúmeroVoltas * (π * Diâmetro)
                 distancia = numero_voltas * math.pi * diametro_gaiola
 
-                # Velocidade média = Distância / Tempo (se tempo > 0)
                 velocidade_media = distancia / tempo_atividade if tempo_atividade > 0 else 0
 
-                # Atualizando os valores nos labels
                 self.value_nome_gaiola.setText(nome_gaiola)
                 self.value_numero_voltas.setText(str(numero_voltas))
                 self.value_tempo_atividade.setText(f"{tempo_atividade} s")
@@ -110,5 +98,4 @@ class LiveViewScreen(QWidget):
                 self.value_distancia.setText(f"{distancia:.2f} m")
                 self.value_velocidade.setText(f"{velocidade_media:.2f} m/s")
         except Exception as e:
-            # Se não conseguir obter os dados, não atualiza
             pass

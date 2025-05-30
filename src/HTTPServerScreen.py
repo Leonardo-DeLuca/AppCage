@@ -1,29 +1,35 @@
-import os, socket, struct, datetime
+import sys
+import os
+import socket
+import struct
+import datetime
 from flask import Flask, request, jsonify, send_file
 from werkzeug.serving import make_server
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 from HTTPServerThread import HTTPServerThread
 
-# Flags de upload
-_request_upload = False
-_uploaded = False
+if getattr(sys, 'frozen', False):
+    BASE_DIR = sys._MEIPASS
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Caminhos
-DATA_LOG_FILE       = "esp_data.txt"
-BIN_FILE            = "data.bin"           # arquivo original gravado pelo ESP
-TXT_CONVERTED_FILE  = "esp_history.txt"
+DATA_LOG_FILE      = os.path.join(BASE_DIR, "esp_data.txt")
+BIN_FILE           = os.path.join(BASE_DIR, "data.bin")
+TXT_CONVERTED_FILE = os.path.join(BASE_DIR, "esp_history.txt")
 
-# Tamanho fixo do nome na header (deve corresponder ao HEADER_NAME_LEN do ESP)
 HEADER_NAME_LEN = 32
 
-# Dicionário que armazena também NomeGaiola e DiametroGaiola
+_request_upload = False
+_uploaded       = False
+
 dados_esp = {
-    "NomeGaiola": "",
-    "DiametroGaiola": 0.0,   # em cm
-    "NumeroVoltas": 0,
-    "TempoAtividade": 0
+    "NomeGaiola":       "",
+    "DiametroGaiola":   0.0,  # cm
+    "NumeroVoltas":     0,
+    "TempoAtividade":   0
 }
+
 
 def get_local_ip():
     try:
@@ -35,10 +41,11 @@ def get_local_ip():
     except:
         return "127.0.0.1"
 
+
 class HTTPServerScreen(QWidget):
     def __init__(self):
         super().__init__()
-        # Garante que o arquivo de log exista
+
         open(DATA_LOG_FILE, "a").close()
 
         self.server_thread  = None
@@ -66,16 +73,14 @@ class HTTPServerScreen(QWidget):
             global _request_upload, _uploaded
             data = request.get_data()
             try:
-                # Salva o .bin recebido
                 with open(BIN_FILE, "wb") as f:
                     f.write(data)
                 print("✅ Arquivo binário salvo com sucesso.")
 
-                # Converte e atualiza dados_esp
                 self.convert_bin_to_txt()
 
                 _request_upload = False
-                _uploaded = True
+                _uploaded       = True
                 return jsonify({"status": "received"})
             except Exception as e:
                 print("❌ Erro ao salvar binário:", e)
@@ -91,7 +96,7 @@ class HTTPServerScreen(QWidget):
         @self.app.route("/dados", methods=["GET"])
         def receber_dados():
             return dados_esp
-        
+
         @self.app.route("/dados", methods=["POST"])
         def enviar_dados():
             global dados_esp
@@ -105,39 +110,36 @@ class HTTPServerScreen(QWidget):
 
         @self.app.route("/download", methods=["GET"])
         def download_converted():
-            if os.path.exists(TXT_CONVERTED_FILE):
-                return send_file(
-                    TXT_CONVERTED_FILE,
-                    as_attachment=True,
-                    download_name="esp_history.txt",
-                    mimetype="text/plain"
-                )
-            else:
-                return "Arquivo convertido não encontrado", 404
+            try:
+                if os.path.exists(TXT_CONVERTED_FILE):
+                    return send_file(
+                        TXT_CONVERTED_FILE,
+                        as_attachment=True,
+                        download_name="esp_history.txt",
+                        mimetype="text/plain"
+                    )
+                else:
+                    return "Arquivo convertido não encontrado", 404
+            except Exception as e:
+                print("❌ Erro no download:", e)
+                return jsonify({"error": str(e)}), 500
 
         @self.app.route("/ping", methods=["GET"])
         def ping():
             return "ok", 200
 
     def convert_bin_to_txt(self):
-        """
-        Converte o binário em texto formatado com:
-        Nome da Gaiola, Diâmetro, e para cada atividade:
-        Início | Voltas | Duração | Distância | Velocidade
-        """
         global dados_esp
 
         try:
             with open(BIN_FILE, "rb") as f:
-                # --- Cabeçalho ---
                 name_bytes = f.read(HEADER_NAME_LEN)
                 name = name_bytes.split(b'\x00', 1)[0].decode('utf-8', 'ignore')
                 diameter_cm = struct.unpack("<f", f.read(4))[0]
 
-                dados_esp["NomeGaiola"] = name
+                dados_esp["NomeGaiola"]     = name
                 dados_esp["DiametroGaiola"] = diameter_cm
 
-                # Cabeçalho textual
                 lines = [
                     f"Nome da Gaiola: {name}",
                     f"Diâmetro da Gaiola: {diameter_cm:.2f} cm",
@@ -168,7 +170,6 @@ class HTTPServerScreen(QWidget):
             print("📝 TXT formatado gerado com sucesso!")
         except Exception as e:
             print("❌ Erro na conversão bin→txt:", e)
-
 
     def initUI(self):
         layout = QVBoxLayout()

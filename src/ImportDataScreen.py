@@ -18,14 +18,12 @@ class ImportDataScreen(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Título
         title = QLabel("Importar Histórico do ESP")
         title.setFont(QFont("Segoe UI", 24, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
         layout.addSpacing(30)
 
-        # Botão Solicitar
         self.btn_request = QPushButton("📤 Solicitar Histórico")
         self.btn_request.setFixedSize(350, 70)
         self.btn_request.setFont(QFont("Segoe UI", 18))
@@ -34,7 +32,6 @@ class ImportDataScreen(QWidget):
         layout.addWidget(self.btn_request, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addSpacing(20)
 
-        # Botão Salvar TXT
         self.btn_save_txt = QPushButton("💾 Salvar como TXT")
         self.btn_save_txt.setFixedSize(350, 70)
         self.btn_save_txt.setFont(QFont("Segoe UI", 18))
@@ -44,7 +41,6 @@ class ImportDataScreen(QWidget):
         layout.addWidget(self.btn_save_txt, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addSpacing(20)
 
-        # Botão Salvar Excel
         self.btn_save_excel = QPushButton("📊 Salvar como Excel")
         self.btn_save_excel.setFixedSize(350, 70)
         self.btn_save_excel.setFont(QFont("Segoe UI", 18))
@@ -54,7 +50,6 @@ class ImportDataScreen(QWidget):
         layout.addWidget(self.btn_save_excel, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addSpacing(30)
 
-        # Label de status
         self.status_label = QLabel("Pronto para solicitação")
         self.status_label.setFont(QFont("Segoe UI", 16))
         self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -62,13 +57,11 @@ class ImportDataScreen(QWidget):
 
         self.setLayout(layout)
 
-        # Timer para checar status de upload
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.check_status)
 
     def _fetch_records_and_meta(self):
         try:
-            # Busca o conteúdo do arquivo TXT (texto formatado)
             resp = requests.get("http://localhost:5000/download", timeout=5)
             resp.raise_for_status()
             content = resp.text.strip().splitlines()
@@ -153,11 +146,9 @@ class ImportDataScreen(QWidget):
 
     def save_excel(self):
         try:
-            # Busca registros e metadados
             recs = self._fetch_records_and_meta()
             df = pd.DataFrame(recs) 
 
-            # Remove as colunas redundantes que já estão no cabeçalho
             df = df.drop(columns=["NomeGaiola", "Diâmetro (cm)"], errors="ignore")
 
 
@@ -169,14 +160,10 @@ class ImportDataScreen(QWidget):
 
             # Cria o Excel
             with pd.ExcelWriter(path, engine='openpyxl') as writer:
-                # Escreve o DataFrame a partir da linha 4 (índice startrow=3)
                 df.to_excel(writer, index=False, startrow=3, sheet_name='Histórico')
                 
-                # Acessa a planilha gerada
                 worksheet = writer.sheets['Histórico']
                 
-                # Escreve cabeçalho nas duas primeiras linhas
-                # Usamos os mesmos valores do primeiro registro
                 if recs:
                     primeiro = recs[0]
                     nome = primeiro["NomeGaiola"]
@@ -188,12 +175,12 @@ class ImportDataScreen(QWidget):
                 worksheet['A1'] = f"Nome da Gaiola: {nome}"
                 worksheet['A2'] = f"Diâmetro da Gaiola: {diam_cm:.2f} cm"
                 
-                # (Opcional) ajusta largura de colunas para melhor visualização
+                
                 for idx, col in enumerate(df.columns, start=1):
                     worksheet.column_dimensions[worksheet.cell(row=4, column=idx).column_letter].width = 20
 
             self.status_label.setText(f"Excel salvo em:\n{path}")
-            # Reseta flags no servidor
+            
             requests.post("http://localhost:5000/reset-upload", timeout=1)
             self.reset_buttons()
 
