@@ -24,12 +24,13 @@ _request_upload = False
 _uploaded       = False
 
 dados_esp = {
-    "NomeGaiola":       "",
-    "DiametroGaiola":   0.0,  # cm
-    "NumeroVoltas":     0,
-    "TempoAtividade":   0
+    "NomeGaiola":        "",
+    "DiametroGaiola":    0.0,
+    "NumeroVoltas":      0,
+    "TempoAtividade":    0,
+    "InicioAtividade":   0,  
+    "FimAtividade":      0  
 }
-
 
 def get_local_ip():
     try:
@@ -102,11 +103,16 @@ class HTTPServerScreen(QWidget):
             global dados_esp
             dados = request.get_json()
             if dados:
-                for chave in ["NumeroVoltas", "NomeGaiola", "TempoAtividade", "DiametroGaiola"]:
+                # para cada chave, se existir no JSON, atualiza o dict
+                for chave in [
+                    "NumeroVoltas", "NomeGaiola", "TempoAtividade",
+                    "DiametroGaiola", "InicioAtividade", "FimAtividade"
+                ]:
                     if chave in dados:
                         dados_esp[chave] = dados[chave]
             print("📦 Dados recebidos do ESP:", dados_esp)
             return {"status": "ok"}
+
 
         @self.app.route("/download", methods=["GET"])
         def download_converted():
