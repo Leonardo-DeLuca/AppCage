@@ -10,3 +10,6 @@ Rodar na pasta AppCage o comando python -m venv venv para criar uma ambiente vir
 Acessar o ambiente virtual com ```.\venv\Scripts\activate```.
 Acessar a pasta src ```cd .\src\``` e instalar os pacotes com ```pip install -r ..\requirements.txt```.
 A partir disso já é possível rodar o aplicativo com ```python .\main.py``` ou gerar a build e executavel com ```pyinstaller .\main.spec``` e rodar o executável em ```AppCage\src\dist\main\WheelCageApp.exe```
+
+usuário ficticio, admin/admin
+
